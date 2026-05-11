@@ -1,0 +1,385 @@
+Practical 3: Movie Management System using Apex and Visualforce in Salesforce
+STEP 1: Create Salesforce Developer Account
+Open:
+Salesforce Developer Signup
+Fill:
+•	Name 
+•	Email 
+•	Username 
+•	Password 
+Verify email.
+________________________________________
+STEP 2: Login to Salesforce
+Open:
+Salesforce Login
+Enter:
+•	Username 
+•	Password 
+________________________________________
+STEP 3: Open Setup
+1.	Click ⚙️ Gear Icon 
+2.	Click: 
+Setup
+________________________________________
+STEP 4: Create Custom Object
+Open Object Manager
+Search:
+Object Manager
+Click:
+Object Manager
+________________________________________
+Create Object
+Click:
+Create → Custom Object
+Fill details:
+Property	Value
+Label	Movie
+Plural Label	Movies
+Record Name	Movie Name
+Data Type	Text
+Click:
+Save
+________________________________________
+STEP 5: Create Custom Fields
+________________________________________
+Field 1: Movie ID
+Click:
+Fields & Relationships → New
+Select:
+Number
+Fill:
+Property	Value
+Field Label	Movie ID
+Length	5
+Click:
+Next → Save
+________________________________________
+Field 2: Director Name
+Select:
+Text
+Fill:
+Property	Value
+Field Label	Director Name
+Length	50
+Click:
+Next → Save
+________________________________________
+Field 3: Rating
+Select:
+Number
+Fill:
+Property	Value
+Field Label	Rating
+Length	2
+Decimal Places	1
+Click:
+Next → Save
+________________________________________
+STEP 6: Open Developer Console
+1.	Click Profile Icon 
+2.	Click: 
+Developer Console
+________________________________________
+STEP 7: Create Apex Controller
+Open:
+File → New → Apex Class
+Class Name:
+MovieController
+Click:
+OK
+________________________________________
+STEP 8: Apex Controller Code
+Paste this code:
+public class MovieController {
+
+    public Movie__c mv {get; set;}
+
+    public List<Movie__c> movieList {get; set;}
+
+    public Boolean isEdit {get; set;}
+
+    public MovieController() {
+
+        mv = new Movie__c();
+
+        isEdit = false;
+
+        getMovies();
+    }
+
+    // LOAD MOVIES
+    public void getMovies() {
+
+        movieList = [
+            SELECT Id,
+                   Name,
+                   Movie_ID__c,
+                   Director_Name__c,
+                   Rating__c
+            FROM Movie__c
+        ];
+    }
+
+    // CREATE
+    public PageReference saveMovie() {
+
+        insert mv;
+
+        mv = new Movie__c();
+
+        getMovies();
+
+        return null;
+    }
+
+    // DELETE
+    public PageReference deleteMovie() {
+
+        String movieId =
+            ApexPages.currentPage()
+                     .getParameters()
+                     .get('mid');
+
+        delete [
+            SELECT Id
+            FROM Movie__c
+            WHERE Id = :movieId
+        ];
+
+        getMovies();
+
+        return null;
+    }
+
+    // EDIT
+    public PageReference editMovie() {
+
+        String movieId =
+            ApexPages.currentPage()
+                     .getParameters()
+                     .get('eid');
+
+        mv = [
+            SELECT Id,
+                   Name,
+                   Movie_ID__c,
+                   Director_Name__c,
+                   Rating__c
+            FROM Movie__c
+            WHERE Id = :movieId
+        ];
+
+        isEdit = true;
+
+        return null;
+    }
+
+    // UPDATE
+    public PageReference updateMovie() {
+
+        update mv;
+
+        mv = new Movie__c();
+
+        isEdit = false;
+
+        getMovies();
+
+        return null;
+    }
+}
+Save:
+CTRL + S
+________________________________________
+STEP 9: Create Visualforce Page
+Open:
+File → New → Visualforce Page
+Page Name:
+MoviePage
+Click:
+OK
+________________________________________
+STEP 10: Visualforce GUI Code
+Paste this code:
+<apex:page controller="MovieController">
+
+    <apex:form>
+
+        <apex:pageBlock title="Movie Management System">
+
+            <apex:pageBlockSection columns="1">
+
+                <apex:outputLabel value="Movie Name"/>
+
+                <apex:inputText value="{!mv.Name}" />
+
+                <apex:outputLabel value="Movie ID"/>
+
+                <apex:inputText value="{!mv.Movie_ID__c}" />
+
+                <apex:outputLabel value="Director Name"/>
+
+                <apex:inputText value="{!mv.Director_Name__c}" />
+
+                <apex:outputLabel value="Rating"/>
+
+                <apex:inputText value="{!mv.Rating__c}" />
+
+            </apex:pageBlockSection>
+
+            <!-- SAVE -->
+
+            <apex:commandButton
+                value="Save Movie"
+                action="{!saveMovie}"
+                rendered="{!NOT(isEdit)}"
+                rerender="tbl"/>
+
+            <!-- UPDATE -->
+
+            <apex:commandButton
+                value="Update Movie"
+                action="{!updateMovie}"
+                rendered="{!isEdit}"
+                rerender="tbl"/>
+
+        </apex:pageBlock>
+
+        <!-- TABLE -->
+
+        <apex:pageBlock title="Movie Records">
+
+            <apex:pageBlockTable
+                value="{!movieList}"
+                var="m"
+                id="tbl">
+
+                <apex:column value="{!m.Name}"
+                             headerValue="Movie Name"/>
+
+                <apex:column value="{!m.Movie_ID__c}"
+                             headerValue="Movie ID"/>
+
+                <apex:column value="{!m.Director_Name__c}"
+                             headerValue="Director"/>
+
+                <apex:column value="{!m.Rating__c}"
+                             headerValue="Rating"/>
+
+                <!-- EDIT -->
+
+                <apex:column headerValue="Edit">
+
+                    <apex:commandLink
+                        value="Edit"
+                        action="{!editMovie}">
+
+                        <apex:param
+                            name="eid"
+                            value="{!m.Id}" />
+
+                    </apex:commandLink>
+
+                </apex:column>
+
+                <!-- DELETE -->
+
+                <apex:column headerValue="Delete">
+
+                    <apex:commandLink
+                        value="Delete"
+                        action="{!deleteMovie}">
+
+                        <apex:param
+                            name="mid"
+                            value="{!m.Id}" />
+
+                    </apex:commandLink>
+
+                </apex:column>
+
+            </apex:pageBlockTable>
+
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>
+Save:
+CTRL + S
+________________________________________
+STEP 11: Run Application
+Click:
+Preview
+________________________________________
+STEP 12: Perform CRUD Operations
+________________________________________
+CREATE
+Enter:
+•	Movie Name 
+•	Movie ID 
+•	Director Name 
+•	Rating 
+Click:
+Save Movie
+________________________________________
+READ
+Movie records display automatically in table.
+________________________________________
+UPDATE
+1.	Click: 
+Edit
+2.	Modify details. 
+3.	Click: 
+Update Movie
+________________________________________
+DELETE
+Click:
+Delete
+Movie record removed successfully.
+________________________________________
+Sample Inputs
+Movie Name	Movie ID	Director Name	Rating
+Inception	101	Christopher Nolan	9.0
+Avatar	102	James Cameron	8.5
+Titanic	103	James Cameron	8.8
+________________________________________
+Output
+The application displays:
+•	Movie input form 
+•	Save button 
+•	Update button 
+•	Movie table 
+•	Edit option 
+•	Delete option 
+________________________________________
+Advantages
+•	Easy cloud application development 
+•	GUI-based interface 
+•	Easy CRUD operations 
+•	Secure database management 
+•	Scalable application 
+________________________________________
+Result
+Movie Management System was successfully created using Apex and Visualforce GUI in Salesforce and CRUD operations were performed successfully.
+________________________________________
+Conclusion
+Salesforce Salesforce Apex and Visualforce simplify cloud application development with easy GUI interface and CRUD functionality.
+________________________________________
+Viva Questions and Answers
+Question	Answer
+What is Salesforce?	Salesforce is a cloud-based CRM platform.
+What is Apex?	Apex is the programming language of Salesforce.
+What is Visualforce?	Visualforce is framework used to create GUI pages in Salesforce.
+What is CRUD?	CRUD stands for Create, Read, Update and Delete.
+What is a custom object?	Custom object is user-created database table in Salesforce.
+What is a record?	Record is a row in an object.
+What is controller?	Controller handles logic between GUI and database.
+What is SOQL?	SOQL is Salesforce Object Query Language.
+What is rerender?	It refreshes components dynamically.
+What is pageBlock?	Visualforce component used for designing page sections.
+Difference between Apex and Java?	Apex is cloud-based while Java is general-purpose.
+What is commandButton?	Button used to execute Apex methods.
+What is commandLink?	Link used to call controller methods.
+What is Object Manager?	Tool used to manage objects and fields.
+Why Salesforce is popular?	Because of cloud services and CRM features.

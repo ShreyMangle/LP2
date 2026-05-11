@@ -1,0 +1,208 @@
+Practical 2: Installation and Configuration of Virtualization using KVM on Ubuntu Linux (Including System Not Supported Case)
+bjective
+•	Check virtualization support 
+•	Install KVM 
+•	Configure virtualization 
+•	Create virtual machines 
+•	Handle unsupported systems 
+________________________________________
+Requirements
+•	Ubuntu Linux 
+•	Internet Connection 
+•	Minimum 4 GB RAM 
+•	CPU virtualization support (Intel VT-x / AMD-V) 
+________________________________________
+Theory
+KVM (Kernel-based Virtual Machine) is an open-source virtualization technology built into Linux kernel.
+KVM allows:
+•	Multiple virtual machines 
+•	Different operating systems 
+•	Isolation between systems 
+•	Efficient resource utilization 
+Main Components:
+•	KVM 
+•	QEMU 
+•	libvirt 
+•	virt-manager 
+________________________________________
+STEP 1: Open Terminal
+Shortcut:
+Ctrl + Alt + T
+________________________________________
+STEP 2: Check Virtualization Support
+Run:
+egrep -c '(vmx|svm)' /proc/cpuinfo
+________________________________________
+Output Cases
+Case 1: Supported
+If output is:
+1
+or greater than 1:
+✅ Virtualization supported.
+Proceed to installation.
+________________________________________
+Case 2: Not Supported
+If output is:
+0
+Then virtualization is disabled or unsupported.
+________________________________________
+WHAT TO DO IF SYSTEM IS NOT SUPPORTED
+________________________________________
+Method 1: Enable Virtualization from BIOS
+Restart system.
+Press:
+•	F2 
+•	F10 
+•	DEL 
+•	ESC 
+(depending on laptop/PC)
+Open:
+BIOS/UEFI Settings
+Find:
+•	Intel VT-x 
+•	AMD-V 
+•	Virtualization Technology 
+Enable it.
+Save and Exit.
+________________________________________
+STEP 3: Check Again
+Run:
+egrep -c '(vmx|svm)' /proc/cpuinfo
+If output becomes:
+1
+System supports virtualization now.
+________________________________________
+Method 2: If Hardware Does NOT Support Virtualization
+If CPU does not support VT-x/AMD-V:
+KVM cannot run.
+Use alternative virtualization software:
+Software	Type
+Oracle VM VirtualBox	Desktop Virtualization
+VMware Workstation	Virtualization
+QEMU only	Emulator
+________________________________________
+STEP 4: Update System
+Run:
+sudo apt update
+Then:
+sudo apt upgrade -y
+________________________________________
+STEP 5: Install KVM Packages
+Run:
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager -y
+________________________________________
+STEP 6: Verify KVM Installation
+Run:
+sudo systemctl status libvirtd
+________________________________________
+Output
+active (running)
+________________________________________
+STEP 7: Check KVM Modules
+Run:
+lsmod | grep kvm
+________________________________________
+Output Example
+Intel CPU:
+kvm_intel
+kvm
+AMD CPU:
+kvm_amd
+kvm
+________________________________________
+STEP 8: Add User to Groups
+Run:
+sudo usermod -aG libvirt $USER
+Then:
+sudo usermod -aG kvm $USER
+________________________________________
+STEP 9: Reboot System
+Run:
+sudo reboot
+________________________________________
+STEP 10: Verify KVM
+After reboot:
+virsh list --all
+________________________________________
+Output
+ Id   Name   State
+--------------------
+________________________________________
+STEP 11: Open Virtual Machine Manager
+Run:
+virt-manager
+________________________________________
+STEP 12: Create First VM
+1.	Click: 
+Create New Virtual Machine
+2.	Select: 
+Local install media
+3.	Select Ubuntu ISO file. 
+4.	Allocate: 
+•	RAM 
+•	CPU 
+•	Disk Space 
+5.	VM Name: 
+UbuntuVM1
+6.	Click: 
+Finish
+________________________________________
+STEP 13: Create Second VM
+Repeat process.
+VM Name:
+UbuntuVM2
+________________________________________
+STEP 14: Run Different Files on Both VMs
+________________________________________
+VM1
+Create Python file:
+nano file1.py
+Code:
+print("Running on VM1")
+Run:
+python3 file1.py
+________________________________________
+VM2
+Create second file:
+nano file2.py
+Code:
+print("Running on VM2")
+Run:
+python3 file2.py
+________________________________________
+Output
+VM1:
+Running on VM1
+VM2:
+Running on VM2
+________________________________________
+Important Commands
+Command	Purpose
+virt-manager	Open GUI
+virsh list --all	List VMs
+python3 file.py	Run Python file
+`lsmod	grep kvm`
+sudo systemctl status libvirtd	Check KVM status
+________________________________________
+Advantages
+•	Efficient virtualization 
+•	Multiple operating systems 
+•	Isolation between systems 
+•	Open-source 
+•	High performance 
+________________________________________
+Result
+KVM virtualization was successfully installed and configured on Ubuntu Linux and two virtual machines were created to run different programs independently.
+________________________________________
+Viva Questions and Answers
+Question	Answer
+What is KVM?	Kernel-based Virtual Machine for Linux virtualization.
+What is virtualization?	Running multiple operating systems on one machine.
+What if output is 0 in vmx/svm check?	Enable virtualization from BIOS.
+What if hardware does not support virtualization?	Use VirtualBox or VMware.
+What is VT-x?	Intel virtualization technology.
+What is AMD-V?	AMD virtualization technology.
+What is libvirt?	Virtualization management toolkit.
+Command to open VM manager?	virt-manager
+Command to check virtualization support?	`egrep -c '(vmx
+Difference between VM and container?	VM uses full OS while container shares kernel.

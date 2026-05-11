@@ -1,0 +1,215 @@
+1)Launching an AWS EC2 Ubuntu Instance and Connecting Through Ubuntu Linux Terminal
+Step-by-Step Procedure
+Step 1: Create AWS Account
+1.	Open AWS official website: 
+AWS Official Website
+2.	Click on: 
+Create an AWS Account
+3.	Enter: 
+•	Email address 
+•	Password 
+•	AWS account name 
+4.	Add payment details and complete verification. 
+5.	Choose: 
+Free Tier
+________________________________________
+Step 2: Open EC2 Dashboard
+1.	Login to AWS Console. 
+2.	Search: 
+EC2
+3.	Open: 
+EC2 Dashboard
+________________________________________
+Step 3: Launch EC2 Instance
+1.	Click: 
+Launch Instance
+2.	Enter instance name: 
+MyUbuntuServer
+________________________________________
+Step 4: Choose Ubuntu AMI
+Select:
+Ubuntu Server 24.04 LTS
+(Free Tier Eligible)
+________________________________________
+Step 5: Choose Instance Type
+Select:
+t2.micro
+OR
+t3.micro
+These are free-tier eligible instance types.
+________________________________________
+Step 6: Create Key Pair
+1.	Click: 
+Create New Key Pair
+2.	Enter key name: 
+firstkey
+3.	Select: 
+RSA
+4.	Select format: 
+.pem
+5.	Download the key file. 
+Example:
+firstkey.pem
+________________________________________
+Step 7: Configure Security Group
+Allow:
+SSH Traffic (Port 22)
+Source:
+Anywhere
+This allows terminal connection.
+________________________________________
+Step 8: Launch Instance
+Click:
+Launch Instance
+Wait for instance to start.
+________________________________________
+Step 9: Copy Public IP Address
+Open instance details and copy:
+Public IPv4 Address
+Example:
+51.20.79.103
+________________________________________
+Step 10: Open Ubuntu Linux Terminal
+Shortcut:
+CTRL + ALT + T
+________________________________________
+Step 11: Go to Downloads Folder
+Run:
+cd ~/Downloads
+________________________________________
+Step 12: Check PEM File
+Run:
+ls
+Output should contain:
+firstkey.pem
+________________________________________
+Step 13: Give Permission to PEM File
+Run:
+chmod 400 firstkey.pem
+This secures the key file.
+________________________________________
+Step 14: Connect to EC2 Instance
+Run:
+ssh -i firstkey.pem ubuntu@51.20.79.103
+________________________________________
+Step 15: Accept Connection
+If asked:
+Are you sure you want to continue connecting?
+Type:
+yes
+________________________________________
+Step 16: Successful Connection
+You will see:
+ubuntu@ip-172-31-xx-xx:~$
+Now the local Ubuntu system is connected to the AWS Ubuntu server.
+________________________________________
+Step 17: Update Ubuntu Server
+Run:
+sudo apt update
+________________________________________
+Step 18: Install Python
+Run:
+sudo apt install python3 -y
+________________________________________
+Step 19: Create Python Program
+Run:
+nano hello.py
+Type the following code:
+print("Hello from AWS EC2")
+________________________________________
+Step 20: Save the File
+Press:
+CTRL + O
+Press:
+ENTER
+Exit:
+CTRL + X
+________________________________________
+Step 21: Run Python Program
+Run:
+python3 hello.py
+Output:
+Hello from AWS EC2
+________________________________________
+Step 22: Exit Server
+Run:
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question	Answer
+What is AWS?	AWS (Amazon Web Services) is a cloud computing platform provided by Amazon.
+What is EC2?	EC2 stands for Elastic Compute Cloud. It provides virtual servers in the cloud.
+What is cloud computing?	Cloud computing means providing computing services over the internet.
+What is an EC2 instance?	An EC2 instance is a virtual machine running on AWS cloud.
+What is Ubuntu?	Ubuntu is an open-source Linux operating system.
+Why is Ubuntu used in AWS?	Ubuntu is lightweight, secure, stable, and easy to use.
+What is SSH?	SSH (Secure Shell) is a protocol used to securely connect remote systems.
+Which command is used to connect EC2?	ssh -i firstkey.pem ubuntu@public_ip
+What is the purpose of PEM file?	PEM file is used for secure authentication while connecting to EC2.
+Why do we use chmod 400?	It secures the PEM file by giving read-only permission to the owner.
+What happens if PEM permissions are wrong?	SSH connection may fail with “Unprotected Private Key File” error.
+What is the command to show files in Linux?	ls
+What is the command to check current directory?	pwd
+How to create a file in Ubuntu?	nano filename
+How to exit from SSH connection?	exit
+What is a Security Group?	A Security Group acts as a firewall for EC2 instances.
+Why is Port 22 used?	Port 22 is used for SSH remote connection.
+What is a Public IP Address?	Public IP is an internet-accessible address used to connect EC2 remotely.
+Difference between Public IP and Private IP?	Public IP is internet accessible, while Private IP is used inside internal network.
+What is AMI?	AMI stands for Amazon Machine Image used to launch EC2 instances.
+How did you run Python code on EC2?	By installing Python and running python3 filename.py.
+Which package manager is used in Ubuntu?	APT (Advanced Package Tool).
+Command to install Python?	sudo apt install python3 -y
+Advantages of cloud computing?	Scalability, low cost, accessibility, flexibility, and easy maintenance.
+Difference between traditional server and cloud server?	Traditional server is physical hardware, while cloud server is virtual and scalable.
+Why is EC2 called Elastic?	Because resources can be increased or decreased dynamically.
+What is virtualization?	Virtualization is creating virtual versions of computers or servers.
+Advantages of Ubuntu Linux?	Open source, secure, stable, lightweight, and developer friendly.
+What did you learn from this practical?	Learned to launch EC2 instance, connect using SSH, and run programs on cloud server.
+Real-life uses of EC2?	Website hosting, applications, databases, AI/ML, and gaming servers.
+EC2 full form?	Elastic Compute Cloud.
+SSH full form?	Secure Shell.
+Which port does SSH use?	Port 22.
+What type of OS is Ubuntu?	Linux operating system.
+Who owns AWS?	Amazon.
+What is GB?	GB (Gigabyte) is a decimal storage unit equal to 1,000,000,000 bytes.
+What is GiB?	GiB (Gibibyte) is a binary storage unit equal to 1,073,741,824 bytes.
+Difference between GB and GiB?	GB uses decimal system (1000 based), while GiB uses binary system (1024 based).
+Why does 500 GB show less in Ubuntu?	Ubuntu calculates storage in GiB using binary system.
+Which is larger: GB or GiB?	GiB is slightly larger than GB.
+Where is GB commonly used?	Storage devices like HDDs and SSDs.
+Where is GiB commonly used?	Operating systems like Linux and Windows.
+What is the command to update Ubuntu packages?	sudo apt update
+What is the command to run Python file?	python3 filename.py
+What is Linux?	Linux is an open-source operating system kernel.
+What is terminal in Ubuntu?	Terminal is a command-line interface used to interact with Linux OS.
+What is remote server access?	Accessing another computer/server over a network using SSH.
+Why is AWS popular?	Because it provides scalable, secure, and reliable cloud services globally.
+What is scalability in cloud computing?	Ability to increase or decrease resources according to demand.
+What is the purpose of key pair in AWS?	It provides secure authentication between local system and EC2 server.
+
+GB (Gigabyte)	GiB (Gibibyte)
+Uses decimal system (Base 10)	Uses binary system (Base 2)
+1 GB = 1,000,000,000 bytes	1 GiB = 1,073,741,824 bytes
+1 GB = 1000 MB	1 GiB = 1024 MiB
+Used by storage manufacturers	Used by operating systems
+Smaller storage calculation	Larger storage calculation
+Common in HDD/SSD advertisements	Common in Linux and Windows memory display
+
+
