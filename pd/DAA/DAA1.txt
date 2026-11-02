@@ -1,0 +1,67 @@
+
+#include <iostream>
+using namespace std;
+
+int recursiveSteps = 0;
+int iterativeSteps = 0;
+
+// Recursive Fibonacci
+int fibRecursive(int n) {
+    recursiveSteps++;
+
+    if (n <= 1)
+        return n;
+
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
+}
+
+// Iterative Fibonacci
+void fibIterative(int n) {
+    int prev = 0, curr = 1, next;
+
+    for (int i = 0; i < n; i++) {
+        if (i == 0)
+            cout << prev << " ";
+        else if (i == 1)
+            cout << curr << " ";
+        else {
+            next = prev + curr;
+            cout << next << " ";
+
+            prev = curr;
+            curr = next;
+            iterativeSteps++;
+        }
+    }
+}
+
+int main() {
+    int n;
+
+    cout << "Enter the number of terms: ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "Please enter a positive number.";
+        return 0;
+    }
+
+    // Recursive Fibonacci Series
+    cout << "\nFibonacci Series using Recursion: ";
+
+    for (int i = 0; i < n; i++) {
+        cout << fibRecursive(i) << " ";
+    }
+
+    cout << "\nTotal Recursive Steps: " << recursiveSteps;
+
+    // Iterative Fibonacci Series
+    cout << "\n\nFibonacci Series using Iteration: ";
+
+    fibIterative(n);
+
+    cout << "\nTotal Iterative Steps: " << iterativeSteps;
+
+    cout << endl;
+    return 0;
+}

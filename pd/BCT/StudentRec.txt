@@ -1,0 +1,102 @@
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract StudentData {
+
+    // 1. Structure to store student details
+    struct Student {
+        uint rollNo;
+        string name;
+        uint age;
+        string course;
+    }
+
+    // 2. Array to store multiple students
+    Student[] public students;
+
+    // Variables for tracking Ether and fallback calls
+    uint public fallbackCallCount;
+    uint public totalFallbackWei;
+
+    // Event for adding student details
+    event StudentAdded(
+        uint rollNo,
+        string name,
+        uint age,
+        string course
+    );
+
+    // Event for fallback function
+    event FallbackCalled(
+        address indexed sender,
+        uint value,
+        bytes data
+    );
+
+    // Function to add student details
+    function addStudent(
+        uint _rollNo,
+        string memory _name,
+        uint _age,
+        string memory _course
+    ) public {
+
+        students.push(
+            Student(_rollNo, _name, _age, _course)
+        );
+
+        emit StudentAdded(
+            _rollNo,
+            _name,
+            _age,
+            _course
+        );
+    }
+
+    // Function to retrieve student details
+    function getStudent(uint _index)
+        public
+        view
+        returns (
+            uint,
+            string memory,
+            uint,
+            string memory
+        )
+    {
+        require(_index < students.length, "Invalid index");
+
+        Student memory s = students[_index];
+
+        return (
+            s.rollNo,
+            s.name,
+            s.age,
+            s.course
+        );
+    }
+
+    // Function to get total number of students
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    // Receive function to accept plain Ether transfers
+    receive() external payable {
+        totalFallbackWei += msg.value;
+    }
+
+    // 3. Fallback function
+    fallback() external payable {
+
+        fallbackCallCount++;
+        totalFallbackWei += msg.value;
+
+        emit FallbackCalled(
+            msg.sender,
+            msg.value,
+            msg.data
+        );
+    }
+}
